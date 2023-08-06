@@ -101,13 +101,16 @@ for attachment in attachment_docs:
 data = queries.get_output_format()
 updated_data = data
 output = ""
+
+# add message doc
+output += message_doc + "\n"
 # for chunk in chunks
 for chunked_file in chunked_files:
     for doc in chunked_file.docs:
         content = doc.page_content
         # insert data into dictionary
         # updated_data = queries.parse_document(data, updated_data, content)
-        output+=content+"\n"
+        output += content + "\n"
 # return download button to return output
 # send to chatgpt
 
