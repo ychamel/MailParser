@@ -119,7 +119,7 @@ for chunked_file in chunked_files:
         updated_data = queries.parse_document(data, updated_data, content)
 
 # return download button to return output
-output = json.dumps(updated_data, indent = 4)
+output = json.dumps(updated_data, indent=4)
 # for key, val in updated_data.items():
 #     output += f"{key} : {val} \n"
 st.download_button('Download file', output, 'summary.txt')
