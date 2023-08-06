@@ -30,7 +30,7 @@ def parse_document(BaseData, pdf_output):
     )
 
     # make sure response is in the form of dict
-    updated_data = BaseData
+    updated_data = None
     try:
         updated_data = json.loads(response)
     except:
