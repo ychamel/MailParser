@@ -35,7 +35,8 @@ def parse_document(BaseData, pdf_output):
         for choice in response.choices:
             answer += choice.message.content
         updated_data = json.loads(answer)
-    except:
+    except Exception as e:
+        updated_data = {"Errors": [f"{e}"]}
         print("Couldn't load response.")
 
     # return updated Data
