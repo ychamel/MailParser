@@ -110,5 +110,5 @@ for chunked_file in chunked_files:
 # send to chatgpt
 output = ""
 for key, val in updated_data.items():
-    output += f"{key} : {val}"
+    output += f"{key} : {val} \n"
 st.download_button('Download file', output, 'summary.txt')
