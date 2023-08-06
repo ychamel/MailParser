@@ -103,7 +103,7 @@ updated_data = data
 output = ""
 
 # add message doc
-output += message_doc + "\n"
+output += message_doc.page_content + "\n"
 # for chunk in chunks
 for chunked_file in chunked_files:
     for doc in chunked_file.docs:
