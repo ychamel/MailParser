@@ -18,7 +18,7 @@ def parse_document(BaseData, pdf_output):
     messages = [{"role": "system", "content": "You are an email parser that deals with insurance companies."}]
     prompt = f"Fill the following dictionary with the appropriate values from the following data. adjust the format as you see fit. \n" \
              f"the information filled should be straight forward and not large chunks from the text data or symbols such as end of line statements. \n" \
-             f"The output should be in json format since it will need to be loaded afterwards." \
+             f"The output should be in json format since it will need to be loaded afterwards. \n" \
              f"Dictionary: \n {json.dumps(BaseData)} \n" \
              f"Data: \n {str(pdf_output)} \n"
 
@@ -28,11 +28,13 @@ def parse_document(BaseData, pdf_output):
         messages=messages,
         temperature=0
     )
-
     # make sure response is in the form of dict
-    updated_data = None
+    updated_data = []
     try:
-        updated_data = json.loads(response)
+        answer = ""
+        for choice in response.choices:
+            answer += choice.message.content
+        updated_data = json.loads(answer)
     except:
         print("Couldn't load response.")
 
