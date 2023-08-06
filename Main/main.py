@@ -103,6 +103,8 @@ updated_data = data
 output = ""
 
 # add message doc
+for key, val in message_doc.metadata.items():
+    output += f"{key} : {val} \n"
 for doc in message_doc.docs:
     output += doc.page_content + "\n"
 # for chunk in chunks
