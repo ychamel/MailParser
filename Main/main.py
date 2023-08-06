@@ -1,3 +1,5 @@
+import json
+
 import streamlit as st
 from PIL import Image
 
@@ -100,23 +102,24 @@ for attachment in attachment_docs:
 
 data = queries.get_output_format()
 updated_data = data
-output = ""
+msg_file = ""
 
-# add message doc
+# parse email message
 for key, val in message_doc.metadata.items():
-    output += f"{key} : {val} \n"
+    msg_file += f"{key} : {val} \n"
 for doc in message_doc.docs:
-    output += doc.page_content + "\n"
+    msg_file += doc.page_content + "\n"
+updated_data = queries.parse_document(data, updated_data, msg_file)
+
 # for chunk in chunks
 for chunked_file in chunked_files:
     for doc in chunked_file.docs:
         content = doc.page_content
         # insert data into dictionary
-        # updated_data = queries.parse_document(data, updated_data, content)
-        output += content + "\n"
-# return download button to return output
-# send to chatgpt
+        updated_data = queries.parse_document(data, updated_data, content)
 
+# return download button to return output
+output = json.dumps(updated_data, indent = 4)
 # for key, val in updated_data.items():
 #     output += f"{key} : {val} \n"
 st.download_button('Download file', output, 'summary.txt')
