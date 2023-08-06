@@ -18,6 +18,7 @@ from Main.core.caching import bootstrap_caching
 from Main.core.parsing import read_file
 from Main.core.chunking import chunk_file
 from Main.core.embedding import embed_files
+from mergedeep import merge
 
 EMBEDDING = "openai"
 VECTOR_STORE = "faiss"
@@ -101,25 +102,30 @@ for attachment in attachment_docs:
     chunked_files.append(chunked_file)
 
 data = queries.get_output_format()
-updated_data = data
-msg_file = ""
 
+msg_file = ""
+all_data = []
 # parse email message
 for key, val in message_doc.metadata.items():
     msg_file += f"{key} : {val} \n"
 for doc in message_doc.docs:
     msg_file += doc.page_content + "\n"
-updated_data = queries.parse_document(data, updated_data, msg_file)
-
+updated_data = queries.parse_document(data, msg_file)
+all_data.append(updated_data)
 # for chunk in chunks
 for chunked_file in chunked_files:
     for doc in chunked_file.docs:
         content = doc.page_content
         # insert data into dictionary
-        updated_data = queries.parse_document(data, updated_data, content)
+        updated_data = queries.parse_document(data, content)
+        all_data.append(updated_data)
 
+# merge all results
+out = {}
+for data in all_data:
+    merge(out, data)
 # return download button to return output
-output = json.dumps(updated_data, indent=4)
+output = json.dumps(out, indent=4)
 # for key, val in updated_data.items():
 #     output += f"{key} : {val} \n"
 st.download_button('Download file', output, 'summary.txt')

@@ -1482,6 +1482,17 @@ files = [
 ]
 
 [[package]]
+name = "mergedeep"
+version = "1.3.4"
+description = "A deep merge function for 🐍."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "mergedeep-1.3.4-py3-none-any.whl", hash = "sha256:70775750742b25c0d8f36c55aed03d24c3384d17c951b3175d898bd778ef0307"},
+    {file = "mergedeep-1.3.4.tar.gz", hash = "sha256:0096d52e9dad9939c3d975a774666af186eda617e6ca84df4c94dec30004f2a8"},
+]
+
+[[package]]
 name = "msoffcrypto-tool"
 version = "5.1.1"
 description = "Python tool and library for decrypting MS Office files with passwords or other keys"
@@ -3379,4 +3390,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7ca2c727be528cea9303af12311b606bd480b084a98ab1acfc75d10523d941ee"
+content-hash = "9083a7f9b52871a5fe6f6cb0e046ba69adf35ba65cb43abe20b4ea3a85e592d9"

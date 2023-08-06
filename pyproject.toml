@@ -22,6 +22,7 @@ pycryptodome = "^3.18.0"
 pymupdf = "^1.22.5"
 pypdf = "^3.13.0"
 extract-msg = "^0.42.1"
+mergedeep = "^1.3.4"
 
 
 [tool.poetry.group.dev.dependencies]

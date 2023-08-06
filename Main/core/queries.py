@@ -14,12 +14,11 @@ def get_raw(msg, attachment_data):
     return RAW
 
 
-def parse_document(BaseData,UpdatedData, pdf_output):
+def parse_document(BaseData, pdf_output):
     messages = [{"role": "system", "content": "You are an email parser that deals with insurance companies."}]
     prompt = f"Fill the following dictionary with the appropriate values from the following data. adjust the format as you see fit. \n" \
              f"the information filled should be straight forward and not large chunks from the text data or symbols such as end of line statements. \n" \
-             f"The Dictionary is in this format: \n {BaseData} \n" \
-             f"The Current Data in the dictionary is as follows: \n {UpdatedData} \n" \
+             f"Dictionary: \n {json.dumps(BaseData)} \n" \
              f"Data: \n {str(pdf_output)} \n"
 
     messages.append({"role": "user", "content": prompt})
@@ -30,7 +29,7 @@ def parse_document(BaseData,UpdatedData, pdf_output):
     )
 
     # make sure response is in the form of dict
-    updated_data = UpdatedData
+    updated_data = BaseData
     try:
         updated_data = json.loads(response)
     except:
