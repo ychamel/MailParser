@@ -87,7 +87,7 @@ class PdfFile(File):
             doc.metadata["page"] = i + 1
             docs.append(doc)
             # update progress
-            parsing_bar.progress(i / size, "Parsing PDF")
+            parsing_bar.progress(i+1 / size, "Parsing PDF")
         # file.read() mutates the file object, which can affect caching
         # so we need to reset the file pointer to the beginning
         file.seek(0)

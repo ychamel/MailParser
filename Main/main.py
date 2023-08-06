@@ -100,15 +100,17 @@ for attachment in attachment_docs:
 
 data = queries.get_output_format()
 updated_data = data
+output = ""
 # for chunk in chunks
 for chunked_file in chunked_files:
     for doc in chunked_file.docs:
         content = doc.page_content
         # insert data into dictionary
-        updated_data = queries.parse_document(data, updated_data, content)
+        # updated_data = queries.parse_document(data, updated_data, content)
+        output+=content+"\n"
 # return download button to return output
 # send to chatgpt
-output = ""
-for key, val in updated_data.items():
-    output += f"{key} : {val} \n"
+
+# for key, val in updated_data.items():
+#     output += f"{key} : {val} \n"
 st.download_button('Download file', output, 'summary.txt')
