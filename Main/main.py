@@ -84,6 +84,33 @@ if update_btn:
         # save to memory
         st.session_state["MESSAGE"] = message_doc
         st.session_state["ATTACHMENTS"] = attachment_docs
+
+        # extract from chatgpt
+        # chunk files into chunks readable by chatgpt
+        chunked_files = []
+        for attachment in attachment_docs:
+            chunked_file = chunk_file(attachment, chunk_size=2000, chunk_overlap=100)
+            chunked_files.append(chunked_file)
+
+        data = queries.get_output_format()
+
+        msg_file = ""
+        all_data = []
+        # parse email message
+        for key, val in message_doc.metadata.items():
+            msg_file += f"{key} : {val} \n"
+        for doc in message_doc.docs:
+            msg_file += doc.page_content + "\n"
+        updated_data = queries.parse_document(data, msg_file)
+        all_data.append(updated_data)
+        # for chunk in chunks
+        for chunked_file in chunked_files:
+            for doc in chunked_file.docs:
+                content = doc.page_content
+                # insert data into dictionary
+                updated_data = queries.parse_document(data, content)
+                all_data.append(updated_data)
+        st.session_state["OUTPUT_DATA"] = all_data
     except Exception as e:
         display_file_read_error(e)
 elif not message_doc:
@@ -95,31 +122,7 @@ if not is_file_valid(message_doc):
 if not is_open_ai_key_valid(openai_api_key):
     st.stop()
 
-# chunk files into chunks readable by chatgpt
-chunked_files = []
-for attachment in attachment_docs:
-    chunked_file = chunk_file(attachment, chunk_size=2000, chunk_overlap=100)
-    chunked_files.append(chunked_file)
-
-data = queries.get_output_format()
-
-msg_file = ""
-all_data = []
-# parse email message
-for key, val in message_doc.metadata.items():
-    msg_file += f"{key} : {val} \n"
-for doc in message_doc.docs:
-    msg_file += doc.page_content + "\n"
-updated_data = queries.parse_document(data, msg_file)
-all_data.append(updated_data)
-# for chunk in chunks
-for chunked_file in chunked_files:
-    for doc in chunked_file.docs:
-        content = doc.page_content
-        # insert data into dictionary
-        updated_data = queries.parse_document(data, content)
-        all_data.append(updated_data)
-
+all_data = st.session_state["OUTPUT_DATA"]
 # merge all results
 out = {}
 for data in all_data:

@@ -18,6 +18,7 @@ def parse_document(BaseData, pdf_output):
     messages = [{"role": "system", "content": "You are an email parser that deals with insurance companies."}]
     prompt = f"Fill the following dictionary with the appropriate values from the following data. adjust the format as you see fit. \n" \
              f"the information filled should be straight forward and not large chunks from the text data or symbols such as end of line statements. \n" \
+             f"The output should be in json format since it will need to be loaded afterwards." \
              f"Dictionary: \n {json.dumps(BaseData)} \n" \
              f"Data: \n {str(pdf_output)} \n"
 
