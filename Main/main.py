@@ -5,10 +5,8 @@ from PIL import Image
 
 from Main.components.sidebar import sidebar
 from Main.core import queries
-from Main.core.queries import merge
 
 from Main.ui import (
-    wrap_doc_in_html,
     is_file_valid,
     is_open_ai_key_valid,
     display_file_read_error,
@@ -18,8 +16,6 @@ from Main.core.caching import bootstrap_caching
 
 from Main.core.parsing import read_file
 from Main.core.chunking import chunk_file
-from Main.core.embedding import embed_files
-
 
 EMBEDDING = "openai"
 VECTOR_STORE = "faiss"
@@ -103,14 +99,18 @@ if update_btn:
         for doc in message_doc.docs:
             msg_file += doc.page_content + "\n"
         updated_data = data
-        updated_data = queries.parse_document(data,updated_data, msg_file)
+        updated_data = queries.parse_document(data, updated_data, msg_file)
 
         # for chunk in chunks
         for chunked_file in chunked_files:
-            for doc in chunked_file.docs:
+            parsing_bar = st.progress(0.0, text="Analyzing Chunks")
+            size = len(chunked_file.docs)+1
+            for i in range(size):
+                doc = chunked_file.docs[i]
                 content = doc.page_content
                 # insert data into dictionary
-                updated_data = queries.parse_document(data,updated_data, content)
+                updated_data = queries.parse_document(data, updated_data, content)
+                parsing_bar.progress(i / size, "Analyzing Chunks")
         st.session_state["OUTPUT_DATA"] = updated_data
     except Exception as e:
         display_file_read_error(e)
