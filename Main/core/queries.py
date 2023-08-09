@@ -30,8 +30,8 @@ def parse_document(BaseData, pdf_output):
     )
     # make sure response is in the form of dict
     updated_data = []
+    answer = ""
     try:
-        answer = ""
         for choice in response.choices:
             answer += choice.message.content
         updated_data = json.loads(answer)
