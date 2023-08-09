@@ -86,7 +86,7 @@ if update_btn:
         # chunk files into chunks readable by chatgpt
         chunked_files = []
         for attachment in attachment_docs:
-            chunked_file = chunk_file(attachment, chunk_size=8000, chunk_overlap=0)
+            chunked_file = chunk_file(attachment, chunk_size=2000, chunk_overlap=0)
             chunked_files.append(chunked_file)
 
         data = queries.get_output_format()
@@ -104,13 +104,13 @@ if update_btn:
         # for chunk in chunks
         for chunked_file in chunked_files:
             parsing_bar = st.progress(0.0, text="Analyzing Chunks")
-            size = len(chunked_file.docs)+1
+            size = len(chunked_file.docs)
             for i in range(size):
                 doc = chunked_file.docs[i]
                 content = doc.page_content
                 # insert data into dictionary
                 updated_data = queries.parse_document(data, updated_data, content)
-                parsing_bar.progress(min(i / size,1.0), "Analyzing Chunks")
+                parsing_bar.progress(min(i / size, 1.0), "Analyzing Chunks")
         st.session_state["OUTPUT_DATA"] = updated_data
     except Exception as e:
         display_file_read_error(e)
