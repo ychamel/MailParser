@@ -124,7 +124,7 @@ if not is_open_ai_key_valid(openai_api_key):
 
 all_data = st.session_state["OUTPUT_DATA"]
 # merge all results
-out = {}
+out = {'Raw':all_data}
 for data in all_data:
     merge(out, data)
 # return download button to return output
