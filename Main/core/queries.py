@@ -13,17 +13,18 @@ def get_raw(msg, attachment_data):
     return RAW
 
 
-def parse_document(BaseData, pdf_output):
+def parse_document(BaseData,curr_data, pdf_output):
     messages = [{"role": "system", "content": "You are an email parser that deals with insurance companies."}]
     prompt = f"Fill the following dictionary with the appropriate values from the following data. adjust the format as you see fit. \n" \
              f"the information filled should be straight forward and not large chunks from the text data or symbols such as end of line statements. \n" \
              f"The output should be in json format since it will need to be loaded afterwards. \n" \
-             f"Dictionary: \n {json.dumps(BaseData)} \n" \
+             f"Dictionary format: \n {json.dumps(BaseData)} \n" \
+             f"Dictionary current data: \n {json.dumps(curr_data)} \n" \
              f"Data: \n {str(pdf_output)} \n"
 
     messages.append({"role": "user", "content": prompt})
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k",
+        model="gpt-3.5-turbo",
         messages=messages,
         temperature=0
     )

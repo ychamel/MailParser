@@ -102,21 +102,16 @@ if update_btn:
             msg_file += f"{key} : {val} \n"
         for doc in message_doc.docs:
             msg_file += doc.page_content + "\n"
-        updated_data = queries.parse_document(data, msg_file)
-        all_data.append(updated_data)
-        # for chunk in chunks
-        parsing_bar = st.progress(0.0, text="progress")
-        size = len(chunked_files)
-        for i in range(size):
-            chunked_file = chunked_files[i]
-            parsing_bar.progress(i /(size + 1), "Parsing chunks")
+        updated_data = data
+        updated_data = queries.parse_document(data,updated_data, msg_file)
 
+        # for chunk in chunks
+        for chunked_file in chunked_files:
             for doc in chunked_file.docs:
                 content = doc.page_content
                 # insert data into dictionary
-                updated_data = queries.parse_document(data, content)
-                all_data.append(updated_data)
-        st.session_state["OUTPUT_DATA"] = all_data
+                updated_data = queries.parse_document(data,updated_data, content)
+        st.session_state["OUTPUT_DATA"] = updated_data
     except Exception as e:
         display_file_read_error(e)
 elif not message_doc:
@@ -128,13 +123,10 @@ if not is_file_valid(message_doc):
 if not is_open_ai_key_valid(openai_api_key):
     st.stop()
 
-all_data = st.session_state["OUTPUT_DATA"]
-# merge all results
-out = {'Raw': all_data}
-for data in all_data:
-    merge(out, data)
+updated_data = st.session_state["OUTPUT_DATA"]
+
 # return download button to return output
-output = json.dumps(out, indent=4)
+output = json.dumps(updated_data, indent=4)
 # for key, val in updated_data.items():
 #     output += f"{key} : {val} \n"
 st.download_button('Download file', output, 'summary.txt')
