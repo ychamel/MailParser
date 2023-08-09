@@ -110,7 +110,7 @@ if update_btn:
                 content = doc.page_content
                 # insert data into dictionary
                 updated_data = queries.parse_document(data, updated_data, content)
-                parsing_bar.progress(i / size, "Analyzing Chunks")
+                parsing_bar.progress(min(i / size,1.0), "Analyzing Chunks")
         st.session_state["OUTPUT_DATA"] = updated_data
     except Exception as e:
         display_file_read_error(e)
