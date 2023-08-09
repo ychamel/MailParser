@@ -5,6 +5,7 @@ from PIL import Image
 
 from Main.components.sidebar import sidebar
 from Main.core import queries
+from Main.core.queries import merge
 
 from Main.ui import (
     wrap_doc_in_html,
@@ -18,7 +19,7 @@ from Main.core.caching import bootstrap_caching
 from Main.core.parsing import read_file
 from Main.core.chunking import chunk_file
 from Main.core.embedding import embed_files
-from mergedeep import merge
+
 
 EMBEDDING = "openai"
 VECTOR_STORE = "faiss"
@@ -89,7 +90,7 @@ if update_btn:
         # chunk files into chunks readable by chatgpt
         chunked_files = []
         for attachment in attachment_docs:
-            chunked_file = chunk_file(attachment, chunk_size=8000, chunk_overlap=100)
+            chunked_file = chunk_file(attachment, chunk_size=8000, chunk_overlap=0)
             chunked_files.append(chunked_file)
 
         data = queries.get_output_format()
@@ -104,7 +105,11 @@ if update_btn:
         updated_data = queries.parse_document(data, msg_file)
         all_data.append(updated_data)
         # for chunk in chunks
+        parsing_bar = st.progress(0.0, text="progress")
+        i = 0
         for chunked_file in chunked_files:
+            parsing_bar.progress(i + 1 / len(chunked_files) + 1, "Parsing chunks")
+            i += 1
             for doc in chunked_file.docs:
                 content = doc.page_content
                 # insert data into dictionary

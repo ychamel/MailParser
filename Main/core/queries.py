@@ -1,5 +1,4 @@
 import json
-
 import openai
 
 
@@ -37,7 +36,7 @@ def parse_document(BaseData, pdf_output):
         updated_data = json.loads(answer)
     except Exception as e:
         updated_data = {
-            "response":answer,
+            "response": answer,
             "Errors": [f"{e}"]}
         print("Couldn't load response.")
 
@@ -147,3 +146,16 @@ def get_output_format():
         "CEF_coverage": CEF_coverage
     }
     return Data
+
+
+def merge(val1, val2):
+    if isinstance(val1, dict):
+        for key, item in val1.items():
+            if key in val2:
+                merge(val1[key], val2[key])
+    if isinstance(val1, list):
+        if isinstance(val2, list):
+            val1.extend(val2)
+    if isinstance(val1, str):
+        if val1 in ["", " ", "NaN", "N/A"] and isinstance(val2, str):
+            val1 = val2
