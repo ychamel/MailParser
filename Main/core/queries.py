@@ -24,7 +24,7 @@ def parse_document(BaseData, pdf_output):
 
     messages.append({"role": "user", "content": prompt})
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=messages,
         temperature=0
     )
@@ -36,7 +36,9 @@ def parse_document(BaseData, pdf_output):
             answer += choice.message.content
         updated_data = json.loads(answer)
     except Exception as e:
-        updated_data = {"Errors": [f"{e}"]}
+        updated_data = {
+            "response":answer,
+            "Errors": [f"{e}"]}
         print("Couldn't load response.")
 
     # return updated Data
