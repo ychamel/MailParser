@@ -24,7 +24,7 @@ def parse_document(BaseData, pdf_output):
 
     messages.append({"role": "user", "content": prompt})
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-16k",
         messages=messages,
         temperature=0
     )

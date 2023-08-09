@@ -89,7 +89,7 @@ if update_btn:
         # chunk files into chunks readable by chatgpt
         chunked_files = []
         for attachment in attachment_docs:
-            chunked_file = chunk_file(attachment, chunk_size=2000, chunk_overlap=100)
+            chunked_file = chunk_file(attachment, chunk_size=8000, chunk_overlap=100)
             chunked_files.append(chunked_file)
 
         data = queries.get_output_format()
@@ -124,7 +124,7 @@ if not is_open_ai_key_valid(openai_api_key):
 
 all_data = st.session_state["OUTPUT_DATA"]
 # merge all results
-out = {'Raw':all_data}
+out = {'Raw': all_data}
 for data in all_data:
     merge(out, data)
 # return download button to return output
