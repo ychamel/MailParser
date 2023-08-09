@@ -106,10 +106,11 @@ if update_btn:
         all_data.append(updated_data)
         # for chunk in chunks
         parsing_bar = st.progress(0.0, text="progress")
-        i = 0
-        for chunked_file in chunked_files:
-            parsing_bar.progress(i / (len(chunked_files) + 1), "Parsing chunks")
-            i += 1
+        size = len(chunked_files)
+        for i in range(size):
+            chunked_file = chunked_files[i]
+            parsing_bar.progress(i /(size + 1), "Parsing chunks")
+
             for doc in chunked_file.docs:
                 content = doc.page_content
                 # insert data into dictionary
