@@ -108,7 +108,7 @@ if update_btn:
         parsing_bar = st.progress(0.0, text="progress")
         i = 0
         for chunked_file in chunked_files:
-            parsing_bar.progress(i + 1 / len(chunked_files) + 1, "Parsing chunks")
+            parsing_bar.progress(i / len(chunked_files) + 1, "Parsing chunks")
             i += 1
             for doc in chunked_file.docs:
                 content = doc.page_content
