@@ -13,14 +13,15 @@ def get_raw(msg, attachment_data):
     return RAW
 
 
-def parse_document(BaseData,curr_data, pdf_output):
+def parse_document(BaseData, curr_data, pdf_output):
     messages = [{"role": "system", "content": "You are an email parser that deals with insurance companies."}]
     prompt = f"Fill the following dictionary with the appropriate values from the following data. adjust the format as you see fit. \n" \
              f"the information filled should be straight forward and not large chunks from the text data or symbols such as end of line statements. \n" \
              f"The output should be in json format since it will need to be loaded afterwards. \n" \
-             f"Dictionary format: \n {json.dumps(BaseData)} \n" \
-             f"Dictionary current data: \n {json.dumps(curr_data)} \n" \
-             f"Data: \n {str(pdf_output)} \n"
+             f"Dictionary base format: \n {json.dumps(BaseData)} \n" \
+             f"{get_coverage_formats()} \n" \
+             f"Dictionary current extracted data: \n {json.dumps(curr_data)} \n" \
+             f"new Data: \n {str(pdf_output)} \n"
 
     messages.append({"role": "user", "content": prompt})
     response = openai.ChatCompletion.create(
@@ -45,9 +46,10 @@ def parse_document(BaseData,curr_data, pdf_output):
     return updated_data
 
 
-def get_output_format():
+def get_coverage_formats():
     # Property Coverage (for every location)
     property_coverage = {
+        "Type": "propery coverage",
         "Location address": "",
         "Building limit": "",
         "Contents limit": "",
@@ -68,6 +70,7 @@ def get_output_format():
 
     # Liability Coverage
     liability_coverage = {
+        "Type": "liability coverage",
         "Limit required": {
             "Bodily Injury Property Damage Limit": "",
             "Personal Advertising Injury Limit": "",
@@ -82,6 +85,7 @@ def get_output_format():
     }
     # CEF Coverage
     CEF_coverage = {
+        "Type": "CEF coverage",
         "equipments": [
             {
                 "Make": "",
@@ -96,7 +100,7 @@ def get_output_format():
                 "Expiring Professional Liability Limit": "",
                 "Proposed Professional Liability Limit": "",
                 "Annual revenue last 12 month": "",
-                "Annual revenue last 12 monthLiability": "",
+                "Annual revenue last 12 month Liability": "",
                 "Number of Employees": "",
                 "Location details – address of all": ""
             },
@@ -127,6 +131,13 @@ def get_output_format():
         ],
     }
 
+    output = f"For the coverage field it will depend on the coverage type. if it's a property coverage, the format will be as follows: \n {json.dumps(property_coverage)} \n" \
+             f" if it's a liability coverage, the format will be as follows: \n {json.dumps(liability_coverage)} \n" \
+             f" if it's a CEF coverage, the format will be as follows: \n {json.dumps(CEF_coverage)} \n"
+    return output
+
+
+def get_output_format():
     Data = {
         "Insured Name": ""
         ,
@@ -140,11 +151,7 @@ def get_output_format():
         ,
         "Description of Operations": ""
         ,
-        "property_coverage": property_coverage
-        ,
-        "liability_coverage": liability_coverage
-        ,
-        "CEF_coverage": CEF_coverage
+        "coverage": []
     }
     return Data
 

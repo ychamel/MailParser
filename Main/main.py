@@ -106,6 +106,7 @@ if update_btn:
                 content = doc.page_content
                 contexts.append(content)
 
+        # combine and parse chunks
         parsing_bar = st.progress(0.0, text="Analyzing Chunks")
         start = 0
         end = 0
