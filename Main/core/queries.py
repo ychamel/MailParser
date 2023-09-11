@@ -60,12 +60,13 @@ def get_coverage_formats():
         "Year built": "",
         "Type of construction": "",
         "Type of Roof": "",
-        "The year of last update/ renovation to building , HVAC, plumbing and electrical": "",
+        "The year of last update(renovation to building , HVAC, plumbing and electrical)": "",
         "Square footage": "",
         "Number of Stories": "",
         "Occupied by insured as": "",
         "Adjacent exposure": "",
-        "Mortgagee details – Name and Address": ""
+        "Mortgagee details": {"name": "",
+                              "address": ""}
     }
 
     # Liability Coverage
@@ -78,10 +79,10 @@ def get_coverage_formats():
             "Non Owned Automobile Deductible": "",
         },
         "Annual revenue": "",
-        "Revenue split – US, Canada and others": "",
+        "Revenue split": "",
         "Liquor receipts": "",
         "Liquor percent": "",
-        "Location details – address of all": ""
+        "Location details": ""
     }
     # CEF Coverage
     CEF_coverage = {
@@ -102,7 +103,7 @@ def get_coverage_formats():
                 "Annual revenue last 12 month": "",
                 "Annual revenue last 12 month Liability": "",
                 "Number of Employees": "",
-                "Location details – address of all": ""
+                "Location details": ""
             },
         ],
         "directors_and_officers": [
@@ -133,7 +134,8 @@ def get_coverage_formats():
 
     output = f"For the coverage field it will depend on the coverage type. if it's a property coverage, the format will be as follows: \n {json.dumps(property_coverage)} \n" \
              f" if it's a liability coverage, the format will be as follows: \n {json.dumps(liability_coverage)} \n" \
-             f" if it's a CEF coverage, the format will be as follows: \n {json.dumps(CEF_coverage)} \n"
+             f" if it's a CEF coverage, the format will be as follows: \n {json.dumps(CEF_coverage)} \n" \
+             "The empty fields of the dictionaries need to be filled or omitted otherwise. this also applies for the nested fields.\n"
     return output
 
 
@@ -151,7 +153,7 @@ def get_output_format():
         ,
         "Description of Operations": ""
         ,
-        "coverage": []
+        "Coverage": []
     }
     return Data
 
