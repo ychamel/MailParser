@@ -102,10 +102,7 @@ if update_btn:
         # get text info from chunks and order into list
         contexts = []
         for chunked_file in chunked_files:
-            parsing_bar = st.progress(0.0, text="Analyzing Chunks")
-            size = len(chunked_file.docs)
-            for i in range(size):
-                doc = chunked_file.docs[i]
+            for doc in chunked_file.docs:
                 content = doc.page_content
                 contexts.append(content)
 
@@ -119,7 +116,6 @@ if update_btn:
                     "\n\n---\n\n".join(contexts[start:end - 1])
                 )
                 start = end
-                break
             elif end == len(contexts) - 1:
                 prompt = (
                     "\n\n---\n\n".join(contexts[start:end])
