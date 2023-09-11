@@ -112,7 +112,7 @@ if update_btn:
         end = 0
         while end < len(contexts):
             prompt = None
-            if len("\n\n---\n\n".join(contexts[start:end])) >= 3500:
+            if len("\n\n---\n\n".join(contexts[start:end])) >= 8000:
                 prompt = (
                     "\n\n---\n\n".join(contexts[start:end - 1])
                 )
