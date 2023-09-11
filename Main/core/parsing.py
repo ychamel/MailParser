@@ -108,15 +108,15 @@ class MsgFile(File):
     @classmethod
     def from_bytes(cls, file: BytesIO) -> "MsgFile":
         msg = extract_msg.Message(file)
-        data = {
-            "Sender": msg.sender,
-            "Date": msg.date,
-            "Subject": msg.subject,
-        }
-        text = msg.body
+        text = """
+            "Sender": msg.sender \n
+            "Date": msg.date \n
+            "Subject": msg.subject \n
+        """
+        text += msg.body
         doc = Document(page_content=text.strip())
         file.seek(0)
-        return cls(name=file.name, id=md5(file.read()).hexdigest(), metadata=data, docs=[doc])
+        return cls(name=file.name, id=md5(file.read()).hexdigest(), docs=[doc])
 
 
 def read_file(file: BytesIO) -> File:

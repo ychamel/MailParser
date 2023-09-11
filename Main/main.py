@@ -85,32 +85,51 @@ if update_btn:
         # extract from chatgpt
         # chunk files into chunks readable by chatgpt
         chunked_files = []
+
+        # chunk mail file
+        chunked_file = chunk_file(message_doc, chunk_size=400, chunk_overlap=0)
+        chunked_files.append(chunked_file)
+        # chunk attachments
         for attachment in attachment_docs:
-            chunked_file = chunk_file(attachment, chunk_size=2000, chunk_overlap=0)
+            chunked_file = chunk_file(attachment, chunk_size=400, chunk_overlap=0)
             chunked_files.append(chunked_file)
 
         data = queries.get_output_format()
 
-        msg_file = ""
         all_data = []
-        # parse email message
-        for key, val in message_doc.metadata.items():
-            msg_file += f"{key} : {val} \n"
-        for doc in message_doc.docs:
-            msg_file += doc.page_content + "\n"
         updated_data = data
-        updated_data = queries.parse_document(data, updated_data, msg_file)
 
-        # for chunk in chunks
+        # get text info from chunks and order into list
+        contexts = []
         for chunked_file in chunked_files:
             parsing_bar = st.progress(0.0, text="Analyzing Chunks")
             size = len(chunked_file.docs)
             for i in range(size):
                 doc = chunked_file.docs[i]
                 content = doc.page_content
-                # insert data into dictionary
-                updated_data = queries.parse_document(data, updated_data, content)
-                parsing_bar.progress(min(i / size, 1.0), "Analyzing Chunks")
+                contexts.append(content)
+
+        parsing_bar = st.progress(0.0, text="Analyzing Chunks")
+        start = 0
+        end = 0
+        while end < len(contexts):
+            prompt = None
+            if len("\n\n---\n\n".join(contexts[start:end])) >= 3500:
+                prompt = (
+                    "\n\n---\n\n".join(contexts[start:end - 1])
+                )
+                start = end
+                break
+            elif end == len(contexts) - 1:
+                prompt = (
+                    "\n\n---\n\n".join(contexts[start:end])
+                )
+            if prompt:
+                updated_data = queries.parse_document(data, updated_data, prompt)
+                parsing_bar.progress(min(end / len(contexts), 1.0), "Analyzing Chunks")
+            end += 1
+        parsing_bar.progress(1.0, "Analyzing Chunks")
+
         st.session_state["OUTPUT_DATA"] = updated_data
     except Exception as e:
         display_file_read_error(e)
