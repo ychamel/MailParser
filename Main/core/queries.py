@@ -19,6 +19,7 @@ def parse_document(BaseData, curr_data, pdf_output):
              f"Extract all relevant information from the new data given and fill them in the current dictionary, adjust the format as you see fit. \n" \
              f"The information filled should be straight forward and not large chunks from the text data or symbols such as end of line statements. \n" \
              f"The output should be in json format since it will need to be loaded afterwards. \n" \
+             f"also don't add any text or explanation outside of the json output, since your output will be loaded as json directly. \n " \
              f"Dictionary base format: \n {json.dumps(BaseData)} \n" \
              f"{get_coverage_formats()} \n" \
              f"Dictionary current format with previously extracted data: \n {json.dumps(curr_data)} \n" \
