@@ -25,7 +25,7 @@ def parse_document(BaseData, curr_data, pdf_output):
 
     messages.append({"role": "user", "content": prompt})
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=messages,
         temperature=0
     )
@@ -149,7 +149,7 @@ def get_output_format():
         ,
         "Policy Inception and Policy Expiry Date": ""
         ,
-        "Broker’s name and contact information  ": ""
+        "Broker's name and contact information  ": ""
         ,
         "Description of Operations": ""
         ,
